@@ -1,0 +1,47 @@
+-- -----------------------------------------------------------
+-- 0.  Skapa och/eller välj databasen
+--    (backticks behövs runt namnet på grund av bindestrecket)
+-- -----------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS `8153-boatlog`
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE `8153-boatlog`;
+
+-- -----------------------------------------------------------
+-- 1.  Rensa ev. gammal tabell (om du kör skriptet igen)
+-- -----------------------------------------------------------
+DROP TABLE IF EXISTS boat_log;
+
+-- -----------------------------------------------------------
+-- 2.  Bygg EN tabell som rymmer allt
+-- -----------------------------------------------------------
+CREATE TABLE boat_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,          -- räknare
+    trip_name        VARCHAR(100)  NOT NULL,    -- Namn på turen
+    destination      VARCHAR(100)  NOT NULL,    -- Vart du åkte
+    sea_miles        DECIMAL(5,1)  NOT NULL,    -- Sjömil (t.ex. 7,5)
+    trip_date        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    weather_summary  TEXT,                      -- Kort väderanteckning
+    notes            TEXT,                      -- Egna anteckningar
+
+    -- 10 enkla Ja/Nej-rutor för checklistan
+    chk_weather_route     TINYINT(1) DEFAULT 0,
+    chk_fuel_oil          TINYINT(1) DEFAULT 0,
+    chk_engine_start      TINYINT(1) DEFAULT 0,
+    chk_battery_electrics TINYINT(1) DEFAULT 0,
+    chk_bilge_hull        TINYINT(1) DEFAULT 0,
+    chk_steering_throttle TINYINT(1) DEFAULT 0,
+    chk_safety_gear       TINYINT(1) DEFAULT 0,
+    chk_comms             TINYINT(1) DEFAULT 0,
+    chk_lines_anchor      TINYINT(1) DEFAULT 0,
+    chk_food_sunscreen    TINYINT(1) DEFAULT 0
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------------
+-- 3.  (Frivilligt) Exempel­rad så du ser att allt funkar
+-- -----------------------------------------------------------
+INSERT INTO boat_log (trip_name, destination, sea_miles)
+VALUES ('Testtur', 'Sandhamn', 10.5);
